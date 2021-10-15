@@ -5,12 +5,12 @@ import requests
 from mail_service import send_email
 import time_utils
 import slotfinder
+from parser import get_args
 
-username = input("Type your email-username and press enter: ")
-password = input("Type your email-password and press enter: ")
+
+username, password, receivers, bib_days = get_args()
+print(username,password)
 timeout = 300
-bib_days = [time_utils.Date('12.07.2021')]
-receivers = []
 
 while True:
     response = requests.get('https://www.umm.uni-heidelberg.de/bibliothek/s1/schulungen/arbeitsplatzreservierung_cms.php')
