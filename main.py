@@ -1,16 +1,43 @@
-# This is a sample Python script.
+import time
+import datetime
+from bs4 import BeautifulSoup
+import requests
+from mail_service import send_email
+import time_utils
+import slotfinder
 
-# Press ⇧F10 to execute it or replace it with your code.
-# Press Double ⇧ to search everywhere for classes, files, tool windows, actions, and settings.
+username = input("Type your email-username and press enter: ")
+password = input("Type your email-password and press enter: ")
+timeout = 300
+bib_days = [time_utils.Date('12.07.2021')]
+receivers = []
 
+while True:
+    response = requests.get('https://www.umm.uni-heidelberg.de/bibliothek/s1/schulungen/arbeitsplatzreservierung_cms.php')
+    soup = BeautifulSoup(response.content, 'html.parser')
+    table = soup.find('table')
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press ⌘F8 to toggle the breakpoint.
+    res_slots = slotfinder.parse_table(table)
+    available_slots = slotfinder.find_available_slots(res_slots)
+    wanted_slots = slotfinder.find_wanted_slots(available_slots, bib_days)
 
+    current_time = datetime.datetime.now()
+    wanted_slots_found = len(wanted_slots)
+    if wanted_slots_found == 0:
+        timeout = time_utils.set_timeout(all_slots_found=False)
+        message = f"No slots found at {current_time}, sleeping until" \
+                  f" {current_time + datetime.timedelta(seconds=timeout)} to search for the following" \
+                  f" remaining slots: {time_utils.concatenate_dates(bib_days)}"
+        print(message)
+    else:
+        timeout = time_utils.set_timeout(all_slots_found=(len(bib_days) == 0))
+        dates_found = time_utils.concatenate_dates(wanted_slots)
+        message = f"Found following slots at {current_time}: {dates_found}. Sleeping until" \
+                  f" {current_time + datetime.timedelta(seconds=timeout)} to search for " \
+                  f"the following remaining slots: {time_utils.concatenate_dates(bib_days)}"
+        print(message)
+        email_content = 'Für folgende Tage sind neue Reservierungsplätze verfügbar: ' + dates_found
 
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('PyCharm')
+        send_email(username, password, receivers, email_content, 'Neue Reservierungsplätze verfügbar')
 
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+    time.sleep(timeout)
