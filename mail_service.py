@@ -1,9 +1,10 @@
 import smtplib
 import ssl
 from email.message import EmailMessage
+from typing import List
 
 
-def send_email(username, password, receivers, text, subject):
+def send_email(username: str, password: str, receivers: List[str], text: str, subject: str) -> None:
     port = 465
     # Create a secure SSL context
     context = ssl.create_default_context()

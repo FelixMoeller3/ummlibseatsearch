@@ -7,8 +7,12 @@ def configure_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser()
     parser.add_argument("--usr", help="the username of the email-account which will send the notification messages")
     parser.add_argument("--pw", help="the password of the email-account which will send the notification messages")
-    parser.add_argument("--r", help="The list of email-accounts which will receive a notification when a slot is avaliable. Email-accounts should be separated with a comma")
-    parser.add_argument("--d", help="The list of days for which a reservation is desired. Days should be separated with a comma")
+    parser.add_argument("--r",
+                        help="The list of email-accounts which will receive a notification when a slot is avaliable."
+                             " Email-accounts should be separated with a comma")
+    parser.add_argument("--d",
+                        help="The list of days for which a reservation is desired. "
+                             "Days should be separated with a comma")
     return parser
 
 

@@ -1,4 +1,6 @@
 import datetime
+from typing import List
+
 
 '''
 defines the timeout for each iteration
@@ -7,10 +9,7 @@ between 9:00 am and 10:00 am polling time is 2 minutes
 '''
 
 
-def set_timeout(all_slots_found):
-    if all_slots_found:
-        # 5 hours = 5 * 60 minutes * 60 seconds
-        return 5 * 60 * 60
+def set_timeout() -> float:
     now = datetime.datetime.now()
     if now.hour in (8, 10):
         return 4*60
@@ -23,7 +22,7 @@ def set_timeout(all_slots_found):
     return (next_start - now).total_seconds()
 
 
-def concatenate_dates(datelist):
+def concatenate_dates(datelist: List[str]) -> str:
     date_string = ''
     if len(datelist) == 0:
         return date_string
@@ -34,14 +33,14 @@ def concatenate_dates(datelist):
 
 
 class Date:
-    def __init__(self, datestring):
+    def __init__(self, datestring: str):
         date_parts = datestring.split(".")
         self.day = int(date_parts[0])
         self.month = int(date_parts[1])
         self.year = int(date_parts[2])
 
-    def equals_date(self, date):
+    def equals_date(self, date) -> bool:
         return (self.day == date.day) and (self.month == date.month) and (self.year == date.year)
 
-    def to_string(self):
+    def to_string(self) -> str:
         return f"{self.day}.{self.month}.{self.year}"
