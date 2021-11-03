@@ -2,7 +2,7 @@
 
 This project allows you to search for seats in the library of Umm (https://www.umm.de/start/) for specific days and get notified via Email when seats for a given day are available.
 
-##Usage
+## Usage
 -- usr 
 The username of the Email-Account which is used to send the notification Emails. Preferably a Gmail-Account.
 
